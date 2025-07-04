@@ -1,0 +1,354 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  overflow: auto;
+  height: 100%;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #0a0a0f;
+  color: #f5f5f7;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 4vw;
+  background: rgba(10,10,15,0.95);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo-placeholder {
+  width: 60px;
+  height: 60px;
+  background: #22223b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  font-weight: bold;
+  letter-spacing: 2px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.logo {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #7f5af0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  min-width: 120px;
+}
+nav ul {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+nav a {
+  color: #f5f5f7;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+nav a:hover {
+  color: #7f5af0;
+}
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #7f5af0;
+  margin-bottom: 1rem;
+}
+.hero p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: #f5f5f7;
+}
+.hero-cta .btn {
+  background: #7f5af0;
+  color: #fff;
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(127,90,240,0.2);
+  transition: background 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+.hero-cta .btn:hover {
+  background: #6246ea;
+  transform: translateY(-3px) scale(1.05);
+}
+.magic-cursor {
+  position: absolute;
+  top: 0; left: 0;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: rgba(127,90,240,0.15);
+  pointer-events: none;
+  z-index: 10;
+  mix-blend-mode: lighten;
+  filter: blur(2px);
+  transition: background 0.3s;
+}
+.hero-bg-parallax {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: linear-gradient(120deg, #23233b 0%, #7f5af0 100%);
+  opacity: 0.7;
+  filter: blur(0.5px) brightness(1.08);
+  will-change: transform;
+  transition: opacity 0.3s;
+}
+.hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 1;
+  filter: brightness(0.7) blur(0.5px);
+  transition: filter 0.3s;
+}
+.hero-bg-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 2;
+  background: linear-gradient(120deg, rgba(35,35,59,0.7) 0%, rgba(127,90,240,0.5) 100%);
+  pointer-events: none;
+}
+.hero > *:not(.hero-bg-parallax):not(canvas):not(.vanta-canvas) {
+  position: relative;
+  z-index: 2;
+}
+section {
+  padding: 5rem 4vw 3rem 4vw;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+section h2 {
+  font-size: 2.2rem;
+  color: #7f5af0;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+.services-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  list-style: none;
+  margin-top: 1.5rem;
+}
+.services-list li {
+  background: #23233b;
+  padding: 1.5rem 1rem;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(127,90,240,0.07);
+  font-size: 1.1rem;
+  color: #f5f5f7;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.services-list li:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(127,90,240,0.15);
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+.contact-form input,
+.contact-form textarea {
+  padding: 1rem;
+  border-radius: 10px;
+  border: none;
+  background: #181825;
+  color: #fff;
+  font-size: 1rem;
+  resize: none;
+}
+.contact-form button {
+  background: #7f5af0;
+  color: #fff;
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(127,90,240,0.2);
+  transition: background 0.2s, transform 0.2s;
+}
+.contact-form button:hover {
+  background: #6246ea;
+  transform: translateY(-2px) scale(1.04);
+}
+.contact-info p {
+  margin-bottom: 0.5rem;
+  color: #b8b8d1;
+}
+.email-btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  background: #7f5af0;
+  color: #fff;
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(127,90,240,0.2);
+  transition: background 0.2s, transform 0.2s;
+  text-decoration: none;
+  text-align: center;
+}
+.email-btn:hover {
+  background: #6246ea;
+  transform: translateY(-3px) scale(1.05);
+}
+footer {
+  text-align: center;
+  padding: 2rem 0 1rem 0;
+  color: #b8b8d1;
+  font-size: 1rem;
+  background: none;
+}
+@media (max-width: 700px) {
+  header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.2rem 2vw;
+  }
+  .hero h1 {
+    font-size: 2.1rem;
+  }
+  .hero p {
+    font-size: 1.1rem;
+  }
+  .hero-cta .btn, .email-btn {
+    font-size: 1rem;
+    padding: 1.1rem 1.5rem;
+    min-width: 90vw;
+    border-radius: 24px;
+  }
+  section {
+    padding: 2.2rem 2vw 1.5rem 2vw;
+  }
+  .services-list {
+    grid-template-columns: 1fr;
+  }
+  .solution-card, .how-step, .testimonial, .faq-item {
+    font-size: 1rem;
+    padding: 1.1rem 0.7rem;
+  }
+  .contact-info p {
+    font-size: 0.98rem;
+  }
+  .whatsapp-float {
+    width: 48px;
+    height: 48px;
+    right: 12px;
+    bottom: 12px;
+  }
+  /* Fix for VANTA.HALO canvas on mobile */
+  .hero {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+  .vanta-canvas {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 0 !important;
+  }
+}
+@media (max-width: 500px) {
+  .hero h1 {
+    font-size: 1.3rem;
+  }
+  .hero p {
+    font-size: 0.98rem;
+  }
+  .hero-cta .btn, .email-btn {
+    font-size: 0.95rem;
+    padding: 1rem 1rem;
+    min-width: 96vw;
+    border-radius: 18px;
+  }
+  .contact-info p {
+    font-size: 0.92rem;
+  }
+}
+/* Space for GSAP and interactive magic styles */
+.whatsapp-float {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  background: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.whatsapp-float:hover {
+  transform: scale(1.08) translateY(-4px);
+  box-shadow: 0 8px 32px rgba(37, 211, 102, 0.28);
+}
+.whatsapp-float svg {
+  display: block;
+}
+.vanta-canvas {
+  position: absolute !important;
+  z-index: 0 !important;
+  top: 0; left: 0; width: 100%; height: 100%;
+}
+
+#home {
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden;
+  position: relative;
+}
