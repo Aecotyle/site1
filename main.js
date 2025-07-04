@@ -19,8 +19,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const isMobile = window.matchMedia('(max-width: 700px)').matches;
   // GSAP Hero Animation
   gsap.from('.hero h1', { y: isMobile ? 10 : 60, opacity: 0, duration: isMobile ? 0.3 : 1.2, ease: 'power3.out' });
-  gsap.from('.hero p', { y: isMobile ? 7 : 40, opacity: 0, duration: isMobile ? 0.25 : 1, delay: 0.4, ease: 'power2.out' });
-  gsap.from('.hero-cta', { y: isMobile ? 5 : 30, opacity: 0, duration: isMobile ? 0.2 : 0.9, delay: 0.8, ease: 'power2.out' });
+  gsap.from('.hero p', { y: isMobile ? 7 : 40, opacity: 0, duration: isMobile ? 0.25 : 1, delay: 0.1, ease: 'power2.out' });
+  gsap.from('.hero-cta', { y: isMobile ? 5 : 30, opacity: 0, duration: isMobile ? 0.2 : 0.9, delay: 0.2, ease: 'power2.out' });
 
   // GSAP animation for solar system diagram
   gsap.to('#sun-rays', {
@@ -55,30 +55,35 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   // GSAP ScrollTrigger animations
-  gsap.utils.toArray('section').forEach(section => {
-    gsap.from(section, {
-      scrollTrigger: {
-        trigger: section,
-        start: isMobile ? 'top 92%' : 'top 80%',
-        toggleActions: 'play none none none',
-      },
-      opacity: 0,
-      y: isMobile ? 24 : 60,
-      duration: isMobile ? 0.7 : 1.1,
-      ease: 'power3.out'
+  if (!isMobile) {
+    gsap.utils.toArray('section').forEach(section => {
+      gsap.from(section, {
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+        opacity: 0,
+        y: 60,
+        duration: 1.1,
+        ease: 'power3.out'
+      });
     });
-  });
+  } else {
+    // On mobile, ensure all sections are visible
+    gsap.set('section', { opacity: 1, y: 0 });
+  }
 
   // Zoom-in effect for solar diagram
   gsap.from('#solar-system-diagram', {
     scrollTrigger: {
       trigger: '#why-solar',
-      start: isMobile ? 'top 90%' : 'top 70%',
+      start: isMobile ? 'top 99%' : 'top 70%',
       toggleActions: 'play none none none',
     },
-    scale: isMobile ? 0.9 : 0.7,
+    scale: isMobile ? 0.98 : 0.7,
     opacity: 0,
-    duration: isMobile ? 0.7 : 1.2,
+    duration: isMobile ? 0.08 : 1.2,
     ease: 'power2.out'
   });
 
@@ -86,13 +91,13 @@ window.addEventListener('DOMContentLoaded', () => {
   gsap.from('.solution-card', {
     scrollTrigger: {
       trigger: '#solutions',
-      start: isMobile ? 'top 92%' : 'top 80%',
+      start: isMobile ? 'top 99%' : 'top 80%',
       toggleActions: 'play none none none',
     },
     opacity: 0,
-    y: isMobile ? 16 : 40,
-    stagger: 0.12,
-    duration: isMobile ? 0.6 : 0.9,
+    y: isMobile ? 2 : 40,
+    stagger: isMobile ? 0.01 : 0.12,
+    duration: isMobile ? 0.08 : 0.9,
     ease: 'power2.out'
   });
 
@@ -100,13 +105,13 @@ window.addEventListener('DOMContentLoaded', () => {
   gsap.from('.how-step', {
     scrollTrigger: {
       trigger: '#how-it-works',
-      start: isMobile ? 'top 92%' : 'top 80%',
+      start: isMobile ? 'top 99%' : 'top 80%',
       toggleActions: 'play none none none',
     },
     opacity: 0,
-    y: isMobile ? 14 : 40,
-    stagger: 0.13,
-    duration: isMobile ? 0.5 : 0.8,
+    y: isMobile ? 2 : 40,
+    stagger: isMobile ? 0.01 : 0.13,
+    duration: isMobile ? 0.08 : 0.8,
     ease: 'power2.out'
   });
 
@@ -114,13 +119,13 @@ window.addEventListener('DOMContentLoaded', () => {
   gsap.from('.testimonial', {
     scrollTrigger: {
       trigger: '#testimonials',
-      start: isMobile ? 'top 95%' : 'top 85%',
+      start: isMobile ? 'top 99%' : 'top 85%',
       toggleActions: 'play none none none',
     },
     opacity: 0,
-    x: isMobile ? 20 : 60,
-    stagger: 0.15,
-    duration: isMobile ? 0.5 : 0.9,
+    x: isMobile ? 2 : 60,
+    stagger: isMobile ? 0.01 : 0.15,
+    duration: isMobile ? 0.08 : 0.9,
     ease: 'power2.out'
   });
 
@@ -128,13 +133,13 @@ window.addEventListener('DOMContentLoaded', () => {
   gsap.from('.faq-item', {
     scrollTrigger: {
       trigger: '#faq',
-      start: isMobile ? 'top 95%' : 'top 85%',
+      start: isMobile ? 'top 99%' : 'top 85%',
       toggleActions: 'play none none none',
     },
     opacity: 0,
-    y: isMobile ? 10 : 30,
-    stagger: 0.09,
-    duration: isMobile ? 0.4 : 0.7,
+    y: isMobile ? 2 : 30,
+    stagger: isMobile ? 0.01 : 0.09,
+    duration: isMobile ? 0.08 : 0.7,
     ease: 'power2.out'
   });
 
@@ -146,8 +151,8 @@ window.addEventListener('DOMContentLoaded', () => {
       end: 'bottom top',
       scrub: true,
     },
-    scale: isMobile ? 1.08 : 1.18,
-    y: isMobile ? -20 : -60,
+    scale: isMobile ? 1.01 : 1.18,
+    y: isMobile ? -2 : -60,
     ease: 'none',
   });
 });
