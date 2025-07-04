@@ -18,9 +18,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const isMobile = window.matchMedia('(max-width: 700px)').matches;
   // GSAP Hero Animation
-  gsap.from('.hero h1', { y: isMobile ? 30 : 60, opacity: 0, duration: isMobile ? 0.7 : 1.2, ease: 'power3.out' });
-  gsap.from('.hero p', { y: isMobile ? 18 : 40, opacity: 0, duration: isMobile ? 0.6 : 1, delay: 0.4, ease: 'power2.out' });
-  gsap.from('.hero-cta', { y: isMobile ? 12 : 30, opacity: 0, duration: isMobile ? 0.5 : 0.9, delay: 0.8, ease: 'power2.out' });
+  gsap.from('.hero h1', { y: isMobile ? 10 : 60, opacity: 0, duration: isMobile ? 0.3 : 1.2, ease: 'power3.out' });
+  gsap.from('.hero p', { y: isMobile ? 7 : 40, opacity: 0, duration: isMobile ? 0.25 : 1, delay: 0.4, ease: 'power2.out' });
+  gsap.from('.hero-cta', { y: isMobile ? 5 : 30, opacity: 0, duration: isMobile ? 0.2 : 0.9, delay: 0.8, ease: 'power2.out' });
 
   // GSAP animation for solar system diagram
   gsap.to('#sun-rays', {
