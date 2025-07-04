@@ -1,7 +1,9 @@
-// Removed video scrub code as VANTA.HALO is used for hero background now
+// Ensure all assets, fonts, VANTA, etc. are fully loaded
+window.onload = () => {
+  const isMobile = window.matchMedia('(max-width: 700px)').matches;
 
-window.addEventListener('DOMContentLoaded', () => {
-  let vantaEffect = VANTA.WAVES({
+  // Initialize VANTA.WAVES effect (desktop and mobile)
+  VANTA.WAVES({
     el: ".vanta-bg",
     mouseControls: true,
     touchControls: true,
@@ -16,13 +18,29 @@ window.addEventListener('DOMContentLoaded', () => {
     zoom: 0.95
   });
 
-  const isMobile = window.matchMedia('(max-width: 700px)').matches;
-  // GSAP Hero Animation
-  gsap.from('.hero h1', { y: isMobile ? 10 : 60, opacity: 0, duration: isMobile ? 0.3 : 1.2, ease: 'power3.out' });
-  gsap.from('.hero p', { y: isMobile ? 7 : 40, opacity: 0, duration: isMobile ? 0.25 : 1, delay: 0.1, ease: 'power2.out' });
-  gsap.from('.hero-cta', { y: isMobile ? 5 : 30, opacity: 0, duration: isMobile ? 0.2 : 0.9, delay: 0.2, ease: 'power2.out' });
+  // === Hero GSAP Animations ===
+  gsap.from('.hero h1', {
+    y: isMobile ? 10 : 60,
+    opacity: 0,
+    duration: isMobile ? 0.3 : 1.2,
+    ease: 'power3.out'
+  });
+  gsap.from('.hero p', {
+    y: isMobile ? 7 : 40,
+    opacity: 0,
+    duration: isMobile ? 0.25 : 1,
+    delay: 0.1,
+    ease: 'power2.out'
+  });
+  gsap.from('.hero-cta', {
+    y: isMobile ? 5 : 30,
+    opacity: 0,
+    duration: isMobile ? 0.2 : 0.9,
+    delay: 0.2,
+    ease: 'power2.out'
+  });
 
-  // GSAP animation for solar system diagram
+  // === Sun & Arrow Animation (always on) ===
   gsap.to('#sun-rays', {
     rotate: 360,
     transformOrigin: '40px 90px',
@@ -30,6 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
     duration: 8,
     ease: 'linear'
   });
+
   gsap.to(['#arrow1', '#arrow2', '#arrow3', '#arrow4', '#arrow5'], {
     opacity: 0.2,
     yoyo: true,
@@ -38,6 +57,8 @@ window.addEventListener('DOMContentLoaded', () => {
     stagger: 0.2,
     ease: 'power1.inOut'
   });
+
+  // === Glow Effects ===
   gsap.to('#panels', {
     boxShadow: '0 0 16px 4px #7f5af0',
     repeat: -1,
@@ -45,6 +66,7 @@ window.addEventListener('DOMContentLoaded', () => {
     duration: 1.5,
     ease: 'sine.inOut'
   });
+
   gsap.to('#home', {
     boxShadow: '0 0 16px 4px #FFD600',
     repeat: -1,
@@ -54,14 +76,15 @@ window.addEventListener('DOMContentLoaded', () => {
     delay: 0.7
   });
 
-  // GSAP ScrollTrigger animations
+  // === Scroll-triggered animations ===
   if (!isMobile) {
+    // Animate sections
     gsap.utils.toArray('section').forEach(section => {
       gsap.from(section, {
         scrollTrigger: {
           trigger: section,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
+          start: 'top 85%', // Better than 99% for mobile precision
+          toggleActions: 'play none none none'
         },
         opacity: 0,
         y: 60,
@@ -69,90 +92,70 @@ window.addEventListener('DOMContentLoaded', () => {
         ease: 'power3.out'
       });
     });
+
+    // Solar system diagram zoom
+    gsap.from('#solar-system-diagram', {
+      scrollTrigger: {
+        trigger: '#why-solar',
+        start: 'top 75%',
+        toggleActions: 'play none none none',
+      },
+      scale: 0.7,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power2.out'
+    });
+
+    // Cards / Steps / Testimonials / FAQ
+    const staggerGroups = [
+      { selector: '.solution-card', trigger: '#solutions' },
+      { selector: '.how-step', trigger: '#how-it-works' },
+      { selector: '.testimonial', trigger: '#testimonials' },
+      { selector: '.faq-item', trigger: '#faq' }
+    ];
+
+    staggerGroups.forEach(({ selector, trigger }) => {
+      gsap.from(selector, {
+        scrollTrigger: {
+          trigger,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+        opacity: 0,
+        y: 40,
+        stagger: 0.12,
+        duration: 0.9,
+        ease: 'power2.out'
+      });
+    });
+
+    // Hero parallax zoom background
+    gsap.to('.hero-bg-parallax', {
+      scrollTrigger: {
+        trigger: '.hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true
+      },
+      scale: 1.18,
+      y: -60,
+      ease: 'none'
+    });
   } else {
-    // On mobile, ensure all sections are visible
-    gsap.set('section', { opacity: 1, y: 0 });
+    // On mobile, skip animations: just show content
+    gsap.set([
+      'section',
+      '#solar-system-diagram',
+      '.solution-card',
+      '.how-step',
+      '.testimonial',
+      '.faq-item',
+      '.hero-bg-parallax'
+    ], { opacity: 1, y: 0, x: 0, scale: 1 });
   }
 
-  // Zoom-in effect for solar diagram
-  gsap.from('#solar-system-diagram', {
-    scrollTrigger: {
-      trigger: '#why-solar',
-      start: isMobile ? 'top 99%' : 'top 70%',
-      toggleActions: 'play none none none',
-    },
-    scale: isMobile ? 0.98 : 0.7,
-    opacity: 0,
-    duration: isMobile ? 0.08 : 1.2,
-    ease: 'power2.out'
-  });
-
-  // Staggered animation for solution cards
-  gsap.from('.solution-card', {
-    scrollTrigger: {
-      trigger: '#solutions',
-      start: isMobile ? 'top 99%' : 'top 80%',
-      toggleActions: 'play none none none',
-    },
-    opacity: 0,
-    y: isMobile ? 2 : 40,
-    stagger: isMobile ? 0.01 : 0.12,
-    duration: isMobile ? 0.08 : 0.9,
-    ease: 'power2.out'
-  });
-
-  // Staggered animation for how-it-works steps
-  gsap.from('.how-step', {
-    scrollTrigger: {
-      trigger: '#how-it-works',
-      start: isMobile ? 'top 99%' : 'top 80%',
-      toggleActions: 'play none none none',
-    },
-    opacity: 0,
-    y: isMobile ? 2 : 40,
-    stagger: isMobile ? 0.01 : 0.13,
-    duration: isMobile ? 0.08 : 0.8,
-    ease: 'power2.out'
-  });
-
-  // Testimonials
-  gsap.from('.testimonial', {
-    scrollTrigger: {
-      trigger: '#testimonials',
-      start: isMobile ? 'top 99%' : 'top 85%',
-      toggleActions: 'play none none none',
-    },
-    opacity: 0,
-    x: isMobile ? 2 : 60,
-    stagger: isMobile ? 0.01 : 0.15,
-    duration: isMobile ? 0.08 : 0.9,
-    ease: 'power2.out'
-  });
-
-  // FAQ
-  gsap.from('.faq-item', {
-    scrollTrigger: {
-      trigger: '#faq',
-      start: isMobile ? 'top 99%' : 'top 85%',
-      toggleActions: 'play none none none',
-    },
-    opacity: 0,
-    y: isMobile ? 2 : 30,
-    stagger: isMobile ? 0.01 : 0.09,
-    duration: isMobile ? 0.08 : 0.7,
-    ease: 'power2.out'
-  });
-
-  // Parallax zoom-in effect for hero background
-  gsap.to('.hero-bg-parallax', {
-    scrollTrigger: {
-      trigger: '.hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: true,
-    },
-    scale: isMobile ? 1.01 : 1.18,
-    y: isMobile ? -2 : -60,
-    ease: 'none',
-  });
-});
+  // Refresh ScrollTrigger after layout stabilizes
+  setTimeout(() => {
+    ScrollTrigger.refresh();
+  }, 100);
+};
