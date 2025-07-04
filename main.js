@@ -1,24 +1,42 @@
-// Ensure all assets, fonts, VANTA, etc. are fully loaded
+// Check WebGL support for VANTA
+function isWebGLAvailable() {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext &&
+              (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+  } catch (e) {
+    return false;
+  }
+}
+
+// === Initialize VANTA Early ===
+document.addEventListener('DOMContentLoaded', () => {
+  if (isWebGLAvailable()) {
+    VANTA.WAVES({
+      el: ".vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      minHeight: 400.00,
+      minWidth: 200.00,
+      scale: 1.0,
+      scaleMobile: 1.0,
+      color: 0x7f5af0,
+      shininess: 50.0,
+      waveHeight: 20.0,
+      waveSpeed: 0.7,
+      zoom: 0.95
+    });
+  } else {
+    console.warn("WebGL not supported — skipping VANTA background.");
+    document.querySelector('.vanta-bg').style.background = '#1f1f1f';
+  }
+});
+
+// === Run GSAP Animations After Full Load ===
 window.onload = () => {
   const isMobile = window.matchMedia('(max-width: 700px)').matches;
 
-  // Initialize VANTA.WAVES effect (desktop and mobile)
-  VANTA.WAVES({
-    el: ".vanta-bg",
-    mouseControls: true,
-    touchControls: true,
-    minHeight: 400.00,
-    minWidth: 200.00,
-    scale: 1.0,
-    scaleMobile: 1.0,
-    color: 0x7f5af0,
-    shininess: 50.0,
-    waveHeight: 20.0,
-    waveSpeed: 0.7,
-    zoom: 0.95
-  });
-
-  // === Hero GSAP Animations ===
+  // Hero animations
   gsap.from('.hero h1', {
     y: isMobile ? 10 : 60,
     opacity: 0,
@@ -40,7 +58,7 @@ window.onload = () => {
     ease: 'power2.out'
   });
 
-  // === Sun & Arrow Animation (always on) ===
+  // Sun and arrows
   gsap.to('#sun-rays', {
     rotate: 360,
     transformOrigin: '40px 90px',
@@ -58,7 +76,7 @@ window.onload = () => {
     ease: 'power1.inOut'
   });
 
-  // === Glow Effects ===
+  // Glow animations
   gsap.to('#panels', {
     boxShadow: '0 0 16px 4px #7f5af0',
     repeat: -1,
@@ -76,14 +94,13 @@ window.onload = () => {
     delay: 0.7
   });
 
-  // === Scroll-triggered animations ===
   if (!isMobile) {
-    // Animate sections
+    // Animate each section on scroll
     gsap.utils.toArray('section').forEach(section => {
       gsap.from(section, {
         scrollTrigger: {
           trigger: section,
-          start: 'top 85%', // Better than 99% for mobile precision
+          start: 'top 85%',
           toggleActions: 'play none none none'
         },
         opacity: 0,
@@ -93,7 +110,7 @@ window.onload = () => {
       });
     });
 
-    // Solar system diagram zoom
+    // Solar diagram
     gsap.from('#solar-system-diagram', {
       scrollTrigger: {
         trigger: '#why-solar',
@@ -106,7 +123,7 @@ window.onload = () => {
       ease: 'power2.out'
     });
 
-    // Cards / Steps / Testimonials / FAQ
+    // Staggered groups
     const staggerGroups = [
       { selector: '.solution-card', trigger: '#solutions' },
       { selector: '.how-step', trigger: '#how-it-works' },
@@ -129,7 +146,7 @@ window.onload = () => {
       });
     });
 
-    // Hero parallax zoom background
+    // Parallax background
     gsap.to('.hero-bg-parallax', {
       scrollTrigger: {
         trigger: '.hero',
@@ -141,8 +158,9 @@ window.onload = () => {
       y: -60,
       ease: 'none'
     });
+
   } else {
-    // On mobile, skip animations: just show content
+    // On mobile, disable animations and show everything
     gsap.set([
       'section',
       '#solar-system-diagram',
@@ -154,7 +172,7 @@ window.onload = () => {
     ], { opacity: 1, y: 0, x: 0, scale: 1 });
   }
 
-  // Refresh ScrollTrigger after layout stabilizes
+  // Refresh ScrollTrigger after layout settles
   setTimeout(() => {
     ScrollTrigger.refresh();
   }, 100);
