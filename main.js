@@ -9,28 +9,57 @@ let object;
 let controls;
 const loader = new GLTFLoader();
 
-loader.load(
-  'scene.gltf',
-  function (gltf) {
-    object = gltf.scene;
-    // Center and scale model (make it larger)
-    const box = new THREE.Box3().setFromObject(object);
-    const size = box.getSize(new THREE.Vector3());
-    const center = box.getCenter(new THREE.Vector3());
-    object.position.x += (object.position.x - center.x);
-    object.position.y += (object.position.y - center.y);
-    object.position.z += (object.position.z - center.z);
-    const scale = 5 / Math.max(size.x, size.y, size.z); // Larger scale
-    object.scale.set(scale, scale, scale);
-    scene.add(object);
-  },
-  function (xhr) {
-    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-  },
-  function (error) {
-    console.error(error);
+// Helper to check if a file exists (async)
+async function fileExists(url) {
+  try {
+    const res = await fetch(url, { method: 'HEAD' });
+    return res.ok;
+  } catch {
+    return false;
   }
-);
+}
+
+async function loadModelAndTextures() {
+  const isMobile = window.innerWidth < 700;
+  let modelPath = 'scene.gltf';
+  if (isMobile && await fileExists('scene_mobile.gltf')) {
+    modelPath = 'scene_mobile.gltf';
+  }
+  // Texture paths
+  const texBase = isMobile && await fileExists('textures/M_Solar_Panel_baseColor_mobile.webp')
+    ? 'textures/M_Solar_Panel_baseColor_mobile.webp' : 'textures/M_Solar_Panel_baseColor.jpeg';
+  const texMetal = isMobile && await fileExists('textures/M_Solar_Panel_metallicRoughness_mobile.webp')
+    ? 'textures/M_Solar_Panel_metallicRoughness_mobile.webp' : 'textures/M_Solar_Panel_metallicRoughness.png';
+  const texNormal = isMobile && await fileExists('textures/M_Solar_Panel_normal_mobile.webp')
+    ? 'textures/M_Solar_Panel_normal_mobile.webp' : 'textures/M_Solar_Panel_normal.jpeg';
+
+  loader.load(
+    modelPath,
+    function (gltf) {
+      object = gltf.scene;
+      // If you want to manually set textures, do it here using texBase, texMetal, texNormal
+      // Example: object.traverse((child) => { if (child.isMesh) { child.material.map = ... } });
+      const box = new THREE.Box3().setFromObject(object);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+      object.position.x += (object.position.x - center.x);
+      object.position.y += (object.position.y - center.y);
+      object.position.z += (object.position.z - center.z);
+      const scale = 5 / Math.max(size.x, size.y, size.z);
+      object.scale.set(scale, scale, scale);
+      scene.add(object);
+    },
+    function (xhr) {
+      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+    },
+    function (error) {
+      console.error(error);
+    }
+  );
+}
+
+// Replace the old loader.load call with:
+loadModelAndTextures();
 
 const container = document.getElementById("container3D");
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -42,24 +71,30 @@ container.appendChild(renderer.domElement);
 camera.position.set(0, 0.2, 1.5);
 
 // Lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+const ambientLight = new THREE.AmbientLight(0xffffff, 2.5);
 scene.add(ambientLight);
-const dirLight = new THREE.DirectionalLight(0xffffff, 1.3);
+const dirLight = new THREE.DirectionalLight(0xffffff, 2.2);
 dirLight.position.set(5, 10, 7);
 scene.add(dirLight);
 // Extra directional light from opposite side
-const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.8);
+const dirLight2 = new THREE.DirectionalLight(0xffffff, 1.5);
 dirLight2.position.set(-5, -8, -7);
 scene.add(dirLight2);
-const pointLight = new THREE.PointLight(0xffffff, 1.0);
+const pointLight = new THREE.PointLight(0xffffff, 2.0);
 pointLight.position.set(0, 2, 2);
 scene.add(pointLight);
 // Add a subtle spotlight for highlights
-const spotLight = new THREE.SpotLight(0xffffff, 0.7, 30, Math.PI / 6, 0.3, 1.5);
+const spotLight = new THREE.SpotLight(0xffffff, 1.2, 30, Math.PI / 6, 0.3, 1.5);
 spotLight.position.set(0, 8, 8);
 spotLight.target.position.set(0, 0, 0);
 scene.add(spotLight);
 scene.add(spotLight.target);
+
+// On mobile, boost exposure for extra brightness
+if (window.innerWidth < 700) {
+  renderer.toneMappingExposure = 1.5;
+  // TODO: Swap to lower-res textures/models for mobile if available
+}
 
 controls = new OrbitControls(camera, renderer.domElement);
 controls.enabled = false;
