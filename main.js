@@ -8,6 +8,7 @@ const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerH
 let object;
 let controls;
 const loader = new GLTFLoader();
+window.modelLoaded = false;
 
 // Helper to check if a file exists (async)
 async function fileExists(url) {
@@ -48,12 +49,14 @@ async function loadModelAndTextures() {
       const scale = 5 / Math.max(size.x, size.y, size.z);
       object.scale.set(scale, scale, scale);
       scene.add(object);
+      window.modelLoaded = true;
     },
     function (xhr) {
       console.log((xhr.loaded / xhr.total * 100) + '% loaded');
     },
     function (error) {
       console.error(error);
+      window.modelLoaded = true;
     }
   );
 }

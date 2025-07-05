@@ -311,11 +311,11 @@
     });
   </script>
   <script>
-    // Loader stays for at least 1.5 seconds, then fades out after site load
+    // Loader stays for at least 1.5 seconds and until the 3D model is loaded
     let loaderMinTimePassed = false;
     let loaderLoaded = false;
     function tryRemoveLoader() {
-      if (loaderMinTimePassed && loaderLoaded) {
+      if (loaderMinTimePassed && window.modelLoaded) {
         const loader = document.getElementById('site-loader');
         if (loader) {
           loader.style.transition = 'opacity 0.6s';
@@ -332,6 +332,8 @@
       loaderLoaded = true;
       tryRemoveLoader();
     });
+    // Also check again every 200ms in case model loads after window load
+    setInterval(tryRemoveLoader, 200);
   </script>
 </body>
 </html> 
