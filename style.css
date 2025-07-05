@@ -1083,3 +1083,8 @@ button, .btn, .email-btn, .solution-card, .how-step, .testimonial, .faq-item, .m
     transform: translateY(0rem);
   }
 }
+
+body.loading {
+  overflow: hidden !important;
+  pointer-events: none !important;
+}

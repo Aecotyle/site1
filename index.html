@@ -9,7 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <link rel="icon" type="image/x-icon" href="logo.ico">
 </head>
-<body>
+<body class="loading">
   <div class="loader" id="site-loader">
     <span class="l">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 11 18" height="18" width="11" class="letter"><path fill="black" d="M0.28 16.14V0.94L3.7 0.64L5.7 1.64V12.3L8.5 12.06L10.5 13.06V16.44L2.28 17.14L0.28 16.14ZM3.5 12.7V0.859999L0.48 1.12V15.94L8.3 15.26V12.28L3.5 12.7Z"></path></svg>
@@ -320,7 +320,10 @@
         if (loader) {
           loader.style.transition = 'opacity 0.6s';
           loader.style.opacity = '0';
-          setTimeout(() => loader.remove(), 700);
+          setTimeout(() => {
+            loader.remove();
+            document.body.classList.remove('loading');
+          }, 700);
         }
       }
     }
@@ -332,7 +335,6 @@
       loaderLoaded = true;
       tryRemoveLoader();
     });
-    // Also check again every 200ms in case model loads after window load
     setInterval(tryRemoveLoader, 200);
   </script>
 </body>
